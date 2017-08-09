@@ -225,11 +225,21 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
         case 'image':
           $id = $this->getEntityIdByLabel('file', NULL, $value['target_id']);
           $entity->{$name}->setValue($id);
-          $entity->{$name}->width = $value['width'];
-          $entity->{$name}->height = $value['height'];
+          if (isset($value['width'])) {
+            $entity->{$name}->width = $value['width'];
+          }
+          if (isset($value['height'])) {
+            $entity->{$name}->height = $value['height'];
+          }
+          if (isset($value['title'])) {
+            $entity->{$name}->title = $value['title'];
+          }
+          if (isset($value['alt'])) {
+            $entity->{$name}->alt = $value['alt'];
+          }
           break;
         case 'entity_reference':
-          if (in_array($settings['target_type'], ['node', 'taxonomy_term', 'media', 'file'])) {
+          if (in_array($settings['target_type'], ['node', 'taxonomy_term', 'media', 'file', 'advertising_product'])) {
             if (!is_array($value)) {
               $id = $this->getEntityIdByLabel($settings['target_type'], NULL, $value);
               $entity->{$name}->setValue($id);

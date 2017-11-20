@@ -283,7 +283,7 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
   /**
    * {@inheritdoc}
    */
-  public function entityDelete($entity) {
+  public function entityDelete($entity_type, $entity) {
     $entity->delete();
   }
 

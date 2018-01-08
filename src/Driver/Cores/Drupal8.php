@@ -254,6 +254,16 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
           }
           break;
 
+        case 'dynamic_entity_reference':
+          foreach ($settings['entity_type_ids'] as $entity_type) {
+            $id = $this->getEntityIdByLabel($entity_type, NULL, $value[0]['target_id']);
+            if ($id) {
+              $entity->{$name}->setValue($id);
+              break;
+            }
+          }
+          break;
+
         case 'entity_reference_revisions':
           $entities = [];
           foreach ($value as $target_values) {

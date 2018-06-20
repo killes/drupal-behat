@@ -224,11 +224,25 @@ class Drupal8 extends OriginalDrupal8 implements CoreInterface {
       $definition = $entity->getFieldDefinition($name);
       $settings = $definition->getSettings();
       switch ($definition->getType()) {
+        case 'image':
+          $id = $this->getEntityIdByLabel('file', NULL, $value['target_id']);
+          $entity->{$name}->setValue($id);
+          $entity->{$name}->width = $value['width'];
+          $entity->{$name}->height = $value['height'];
+          break;
         case 'entity_reference':
-          if (in_array($settings['target_type'], ['node', 'taxonomy_term'])) {
-            // @todo: only supports single values for the moment.
-            $id = $this->getEntityIdByLabel($settings['target_type'], NULL, $value);
-            $entity->{$name}->setValue($id);
+          if (in_array($settings['target_type'], ['node', 'taxonomy_term', 'media', 'file'])) {
+            if (!is_array($value)) {
+              $id = $this->getEntityIdByLabel($settings['target_type'], NULL, $value);
+              $entity->{$name}->setValue($id);
+            }
+            else {
+              $ids = array();
+              foreach ($value as $idx => $label) {
+                $ids[] = $this->getEntityIdByLabel($settings['target_type'], NULL, $label);
+              }
+              $entity->{$name}->setValue($ids);
+            }
           }
           break;
 
